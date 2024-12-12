@@ -37,11 +37,12 @@ const Attendees = () => {
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
     const filtered = guests.filter((guest) =>
-      guest.GuestName.toLowerCase().includes(event.target.value.toLowerCase())
+      guest.GuestName && guest.GuestName.toLowerCase().includes(event.target.value.toLowerCase())
     );
     setFilteredGuests(filtered);
-    setCurrentPage(1); // Reset to the first page when searching
+    setCurrentPage(1); // Reset to the first page when filtering
   };
+  
 
   const handleStatusFilterChange = (status) => {
     setStatusFilter(status);
@@ -49,16 +50,16 @@ const Attendees = () => {
 
   useEffect(() => {
     let filtered = guests.filter((guest) =>
-      guest.GuestName.toLowerCase().includes(searchTerm.toLowerCase())
+      guest.GuestName && guest.GuestName.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    
+  
     // Apply the status filter
     if (statusFilter === 'present') {
       filtered = filtered.filter((guest) => guest.status === 'Present');
     } else if (statusFilter === 'absent') {
       filtered = filtered.filter((guest) => guest.status === 'Absent');
     }
-
+  
     setFilteredGuests(filtered);
     setCurrentPage(1); // Reset to the first page when filtering
   }, [guests, statusFilter, searchTerm]);
@@ -137,7 +138,7 @@ const Attendees = () => {
 
   return (
     <div className="container-groupattendee">
-      <h1 className="headerText-groupattendee">Attendees</h1>
+      <h1 className="headerText-groupattendee">Attendee Tracker</h1>
       <div className="line-groupattendee"></div>
       <h2 className="eventTypesText-groupattendee">People In Event</h2>
       

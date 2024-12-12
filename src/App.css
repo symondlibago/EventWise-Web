@@ -228,6 +228,7 @@ body, html, #root {
 .events-button {
   background-color: #FFC42B;
   color: white;
+  font-weight: bold;
   padding: 10px;
   border: none;
   border-radius: 20px;
@@ -1367,8 +1368,13 @@ button:hover {
 }
 
 .detail-group-events p {
-  margin: 5px 0;
+  margin: 5px 0 15px; /* Adds bottom margin */
 }
+
+.detail-group-events p strong {
+  color: #eeba2b;
+}
+
 
 .payment-status-group {
   margin-top: 20px;
@@ -1379,25 +1385,21 @@ button:hover {
   width: 200px;
 }
 
-.save-button-container {
-  margin-top: 20px;
-  text-align: center;
+.action-buttons {
+  align-items: center;
+  justify-content: center;
+  display: flex;
 }
 
-.save-button {
-  background-color: #4CAF50; /* Green */
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
+.view-details-button-events, 
+.action-buttons,
+.status-button,
+.status-count-button {
+  color: white ;
+font-weight: bold;
 }
 
-.save-button:hover {
-  background-color: #45a049;
-}
-
-
-
+ 
 
 
 
@@ -2668,7 +2670,7 @@ background-color: transparent;
 }
 
 .edit-button-text-profile {
-  color: #000;
+  color: white;
   font-weight: bold;
   font-size: 18px; /* Increased font size */
   margin-left: 10px;
@@ -2832,7 +2834,7 @@ background-color: transparent;
   background-color: #eeba2b;
   border: none;
   border-radius: 25px; /* More rounded corners */
-  color: #000;
+  color: white;
   font-weight: bold;
   font-size: 16px;
   padding: 12px 24px; /* Increased padding */
@@ -2970,8 +2972,9 @@ background-color: transparent;
   cursor: pointer;
   z-index: 100; /* Ensure it's above other elements */
 }
-
-
+.back-button-edit:hover {
+  background-color: transparent;
+}
 .scroll-view-edit {
   flex-grow: 1;
   padding: 20px;
@@ -3072,11 +3075,11 @@ background-color: transparent;
 }
 
 .submit-button-edit {
-  background-color: #FFC42B; /* Yellow background */
+  background-color: #eeba2b; /* Yellow background */
   padding: 10px;
   text-align: center;
   border-radius: 10px;
-  color: black; /* Black text */
+  color: white;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
@@ -3290,6 +3293,7 @@ textarea.text-input-addrole {
   font-size: 28px;
   font-weight: bold;
   text-align: center;
+  color: #eeba2b;
 }
 
 .settings-item {
@@ -3368,6 +3372,13 @@ textarea.text-input-addrole {
   display: flex;
   justify-content: center; /* Center the button horizontally */
   margin-top: 20px; /* Optional: Add space above the button */
+}
+.back-button-addschedule {
+  background-color: transparent;
+}
+
+.back-button-addschedule:hover {
+  background-color: transparent;
 }
 
 
@@ -3481,9 +3492,12 @@ textarea.text-input-addrole {
   cursor: pointer;
 }
 
-.create-portfolio-text-portfolio {
+.create-portfolio-text-portfolio, 
+.create-package-button, 
+.select-service-overlay{
   margin-left: 5px;
   color: white;
+  font-weight: bold;
 }
 
 .cover-photo-section-portfolio {
@@ -3594,7 +3608,12 @@ textarea.text-input-addrole {
   align-items: center;
   z-index: 9999;
 }
-
+.confirm-button,
+.cancel-button {
+  margin-right: 5px;
+  color: white;
+  font-weight: bold;
+}
 .overlay-content-buttons {
   background: white;
   padding: 20px;
@@ -3642,7 +3661,8 @@ textarea.text-input-addrole {
   flex-direction: column;
   justify-content: space-between;
   border: 2px solid #ddd;
-  overflow: auto; /* Remove scrollbars on content */
+  overflow: auto;
+  position: relative; /* Required for positioning the button inside */
 }
 
 .close-overlay-services {
@@ -3656,7 +3676,9 @@ textarea.text-input-addrole {
   border: none;
   padding: 5px;
   border-radius: 50%;
+  z-index: 1; /* Ensure it stays above content */
 }
+
 
 .filter-buttons-container {
   display: flex;
@@ -4225,7 +4247,8 @@ textarea.text-input-addrole {
   height: 100vh;
   padding: 20px;
   background: url('./images/blob.png') no-repeat center center; /* Set background image */
-  background-size: cover;}
+  background-size: cover;
+}
 
 .headerText-groupattendee {
   font-size: 24px;
@@ -4395,6 +4418,18 @@ button:disabled {
   font-size: 16px;
   margin-right: 10px; /* Space between buttons */
 }
+.save-changes-groupattendee {
+  color: white;
+  font-weight: bold;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+.pagination-info {
+  font-size: 12px;
+}
+
+
 
 /* MESSAGES */
 

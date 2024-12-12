@@ -169,8 +169,7 @@ const handleAttendeeClick = (eventId) => {
   };
 
   const renderEventItem = (item) => {
-    // Use the cover photo URL from the item directly
-    const coverPhotoUrl = item.coverPhoto; // Assuming your API response has a `cover_photo` field
+    const coverPhotoUrl = item.coverPhoto; 
 
     return (
       <div key={item.id} className="item-container-events">
@@ -273,6 +272,8 @@ const handleAttendeeClick = (eventId) => {
           {filteredEvents.map(renderEventItem)}
         </div>
       </div>
+
+
       {showOverlay && eventData && (
           <div className="overlay-events">
             <div className="overlay-content-events">
@@ -281,7 +282,7 @@ const handleAttendeeClick = (eventId) => {
                 <h2>Event Details</h2>
               </div>
               <div className="detail-group-events">
-          <label htmlFor="paymentStatus">Payment Status:</label>
+          <label htmlFor="paymentStatus">Payment Status: </label>
           <select
             id="paymentStatus"
             value={paymentStatus}
@@ -292,11 +293,7 @@ const handleAttendeeClick = (eventId) => {
           </select>
         </div>
 
-        <div className="action-buttons">
-          <button onClick={handleSaveChanges} disabled={loading}>
-            {loading ? 'Saving...' : 'Save Changes'}
-          </button>
-        </div>
+        
 
               {/* Event Details */}
               <div className="detail-group-events">
@@ -330,9 +327,15 @@ const handleAttendeeClick = (eventId) => {
                 ) : (
                   <p>No packages available.</p>
                 )}
+                <div className="action-buttons">
+          <button className="action-buttons" onClick={handleSaveChanges} disabled={loading}>
+            {loading ? 'Saving...' : 'Save Changes'}
+          </button>
+        </div>
               </div>
             </div>
           </div>
+          
         )}
     </div>
 

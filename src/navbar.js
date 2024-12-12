@@ -31,12 +31,10 @@ const Navbar = () => {
           <img src={logo} alt="Logo" className="logonavbar" />
         </div>
         <div className="icons">
-          <Link to="/messages" className="icon">
-            <FontAwesomeIcon icon={faEnvelope} size='lg' style={{ marginRight: '10px', color: 'black' }} />
+            <Link to="/profile" className="icon">
+            <FontAwesomeIcon icon={faUserCircle} size='lg' style={{ marginRight: '10px', color: 'black' }} />
           </Link>
-          <Link to="/notifications" className="icon">
-            <FontAwesomeIcon icon={faBell} size='lg' style={{ marginRight: '2rem', color: 'black' }} />
-          </Link>
+         
         </div>
       </div>
       <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
@@ -72,7 +70,7 @@ const Navbar = () => {
         </div>
         <div className="user-info">
           <div className="user-details" onClick={toggleDropdown}>
-            <span className="user-name">Arvin Carrasco</span>
+            <span className="user-name">Arvil Carrasco</span>
             <FontAwesomeIcon icon={faChevronDown} className={`dropdown-icon ${isDropdownOpen ? 'open' : ''}`} />
           </div>
           <div className={`dropdown-menu ${isDropdownOpen ? 'open' : ''}`}>

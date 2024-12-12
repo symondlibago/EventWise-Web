@@ -80,13 +80,6 @@ const EditProfile = () => {
                 Save
               </button>
             </div>
-            
-            <div className="button-container-edit">
-              <button className="create-event-button-edit" onClick={() => handleRoleNavigation('Service Provider')}>
-                <IoMdAdd size={24} color="white" />
-                <span className="create-event-text-edit">Add Service Provider Account</span>
-              </button>
-            </div>
           </div>
         </div>
       </div>

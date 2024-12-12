@@ -49,7 +49,7 @@ const Settings = () => {
     <div className="settings-container">
       {/* Single Back Button at Upper Left Corner */}
       <button onClick={() => navigate('/dashboard')} className="back-button-addschedule">
-        <IoArrowBack size={32} color="#FFC42B" />
+        <IoArrowBack size={32} color="#eeba2b" />
       </button>
 
       <h1 className="settings-header">Settings</h1>
