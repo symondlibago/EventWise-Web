@@ -197,7 +197,7 @@ function Dashboard() {
       <h3 className="event-list-title">Event List for {`${currentMonth}`}</h3>
       <div className="events-list-container-dashboard-left">
         {selectedDayEvents.map((event, index) => (
-          <div className="event-card-dashboard" key={index}>
+          <div className="event-card-dashboard" key={index} onClick={() => navigate('/events')}>
             <img src={event.coverPhoto} alt="Event Cover" className="event-cover-dashboard" />
             <div className="event-info-dashboard">
               <p className="event-name-dashboard">{event.name.charAt(0).toUpperCase() + event.name.slice(1)}</p>

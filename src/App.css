@@ -238,33 +238,6 @@ body, html, #root {
   margin-left: 9rem;
 }
 
-.event-overlay {
-  position: absolute;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  bottom: -60px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  max-height: 200px;
-  width: 150px;
-  overflow-y: auto;
-  cursor: pointer;
-}
-
-.event-overlay ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.event-overlay li {
-  margin-bottom: 5px;
-}
-
 .packages-section-dashboard {
   width: 100%;
   padding: 20px;
@@ -310,6 +283,7 @@ body, html, #root {
   transform: scale(1.02); /* Slightly enlarge on hover */
   border-color: #eeba2b; /* Change border color on hover */
   animation: border-glow 1.5s infinite linear; /* Apply animation */
+  cursor: pointer;
 }
 
 /* Keyframes for border animation */
@@ -4668,6 +4642,8 @@ button:disabled {
 }
 
 
+
+/* SCHEDULE PAGE */
 
 /* SCHEDULE */
 

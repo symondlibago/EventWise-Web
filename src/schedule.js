@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import moment from "moment";
 import './App.css'; // Ensure this path is correct
@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import axios from 'axios'; // Make sure to install axios if not done yet
+import API_URL from "./apiconfig";
 
 const Schedule = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -21,38 +23,22 @@ const Schedule = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [eventName, setEventName] = useState('');
   const [eventDescription, setEventDescription] = useState('');
+  const [events, setEvents] = useState([]); // State for holding events data
   const navigate = useNavigate();
 
-  const schedules = {
-    "2024-11-21": [
-      {
-        time: "09:00 AM",
-        title: "Team Meeting",
-        description: "Discuss project status.",
-        timeline: [
-          { time: "09:00 AM", description: "Event Start" },
-          { time: "09:15 AM", description: "Introduction to the team" },
-          { time: "09:30 AM", description: "Updates from each member" },
-          { time: "10:00 AM", description: "Discussion on blockers" },
-          { time: "10:30 AM", description: "Wrap up and next steps" },
-        ],
-      },
-      {
-        time: "02:00 PM",
-        title: "Client Call",
-        description: "Review client requirements.",
-        timeline: [
-          { time: "02:00 PM", description: "Event Start" },
-          { time: "02:05 PM", description: "Introduction to the client" },
-          { time: "02:15 PM", description: "Review requirements" },
-          { time: "02:45 PM", description: "Discuss feedback" },
-          { time: "03:00 PM", description: "Next steps and follow-up actions" },
-        ],
-      },
-    ],
-  };
+  
 
-  const [temporaryEvents, setTemporaryEvents] = useState([]); // Initialize temporary events state
+  // Fetch events from the backend when the component mounts
+  useEffect(() => {
+    axios.get(`${API_URL}/api/events`) // Adjust the endpoint according to your Laravel setup
+      .then(response => {
+        setEvents(response.data); // Update state with fetched events
+      })
+      .catch(error => {
+        console.error("There was an error fetching the events data:", error);
+      });
+  }, []);
+
   const openOverlay = (event) => {
     setSelectedEvent(event);
     setOverlayVisible(true);
@@ -93,7 +79,8 @@ const Schedule = () => {
       title: eventName,
       description: eventDescription,
     };
-    setTemporaryEvents([...temporaryEvents, newEvent]); // Now it works
+    // Update state with the new event (assuming event is stored in temporaryEvents state)
+    setEvents([...events, newEvent]); // Update events array with new event
     closeEventDetailsOverlay();
   };
 
@@ -114,7 +101,7 @@ const Schedule = () => {
           onClick={() => setSelectedDate(formattedDate)}
         >
           {i}
-          {schedules[formattedDate] && <div className="event-dot-schedule" />}
+          {events.some(event => event.date === formattedDate) && <div className="event-dot-schedule" />}
         </div>
       );
     }
@@ -123,165 +110,146 @@ const Schedule = () => {
 
   return (
     <div className="sched-bg">
-    <div className="schedule-container">
-              <div className="schedule-header-container">
-          <h2 className="schedule-header">Schedule 
-          <button className="add-schedule-button" onClick={() => navigate('/add-schedule')}>
-            <FontAwesomeIcon icon={faPlus} /> Add Schedule
-          </button></h2>
+      <div className="schedule-container">
+        <div className="schedule-header-container">
+          <h2 className="schedule-header">
+            Schedule 
+            <button className="add-schedule-button" onClick={() => navigate('/add-schedule')}>
+              <FontAwesomeIcon icon={faPlus} /> Add Schedule
+            </button>
+          </h2>
         </div>
-        
-<div className="schedule-layout">
-        <div className="calendar-schedule">
-        <div className="current-month-schedule" style={{ fontSize: '2em', margin: '20px 20px 20px 20px' }}>
-          {moment().format("MMMM YYYY")}
-        </div>
-          <div className="days-header-schedule">
-            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-              <div key={day}>{day}</div>
-            ))}
+
+        <div className="schedule-layout">
+          <div className="calendar-schedule">
+            <div className="current-month-schedule" style={{ fontSize: '2em', margin: '20px' }}>
+              {moment().format("MMMM YYYY")}
+            </div>
+            <div className="days-header-schedule">
+              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+                <div key={day}>{day}</div>
+              ))}
+            </div>
+            <div className="dates-schedule">
+              {renderCalendarDays()}
+            </div>
           </div>
-          <div className="dates-schedule">
-            {renderCalendarDays()}
+
+          <div className="details-schedule">
+            <h3>
+              Agenda for {selectedDate ? moment(selectedDate).format("MMMM D, YYYY") : "Select a date"}
+            </h3>
+
+            {selectedDate && events.filter(event => event.date === selectedDate).length > 0 ? (
+  events.filter(event => event.date === selectedDate).map((event, index) => (
+    <div key={index} className="event-container-schedule">
+      <FontAwesomeIcon 
+        icon={faPlus} 
+        className="add-icon-schedule" 
+        onClick={openPlusOverlay} 
+      />
+      <p className="event-time-schedule">
+        {moment(event.time, "HH:mm:ss").format("h:mm A")}
+      </p>
+      <h4 className="event-title-schedule">{event.name}</h4>
+      <p className="event-description-schedule">{event.description}</p>
+      <div className="details-button" onClick={() => openOverlay(event)}>View Details</div>
+    </div>
+  ))
+) : (
+  <p>No events for this date.</p>
+)}
+
           </div>
         </div>
 
-        <div className="details-schedule">
-          <h3>
-            Agenda for {selectedDate ? moment(selectedDate).format("MMMM D, YYYY") : "Select a date"}
-          </h3>
-
-          {selectedDate && schedules[selectedDate] ? (
-            schedules[selectedDate].map((event, index) => (
-              <div
-                key={index}
-                className="event-container-schedule"
-              >
-                <FontAwesomeIcon 
-                  icon={faPlus} 
-                  className="add-icon-schedule" 
-                  onClick={openPlusOverlay} 
-                />
-                <p className="event-time-schedule">{event.time}</p>
-                <h4 className="event-title-schedule">{event.title}</h4>
-                <p className="event-description-schedule">{event.description}</p>
-                <div className="details-button" onClick={() => openOverlay(event)}>View Details</div>
+        {overlayVisible && (
+          <div className="overlay-schedule">
+            <div className="overlay-content-schedule">
+              <div className="overlay-header-schedule">
+                <h4>Time Frame</h4>
+                <button onClick={closeOverlay}>X</button>
               </div>
-            ))
-          ) : (
-            <p>No events for this date.</p>
-          )}
-        </div>
-      </div>
-
-      {overlayVisible && (
-        <div className="overlay-schedule">
-          <div className="overlay-content-schedule">
-            <div className="overlay-header-schedule">
-              <h4>Time Frame</h4>
-              <button onClick={closeOverlay}>X</button>
+              <p>{moment(selectedDate).format("MMMM D, YYYY")}</p>
+              <table className="timeline-table-schedule">
+                <tbody>
+                  {selectedEvent?.timeline.map((timeEvent, index) => (
+                    <tr key={index} className="timeline-row-schedule">
+                      <td>{timeEvent.time}</td>
+                      <td>
+                        <div className="time-circle-schedule" />
+                        <div className="vertical-line" />
+                      </td>
+                      <td>{timeEvent.description}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            <p>{moment(selectedDate).format("MMMM D, YYYY")}</p>
-            <table className="timeline-table-schedule">
-              <tbody>
-                {selectedEvent?.timeline.map((timeEvent, index) => (
-                  <tr key={index} className="timeline-row-schedule">
-                    <td>{timeEvent.time}</td>
-                    <td>
-                      <div className="time-circle-schedule" />
-                      <div className="vertical-line" />
-                    </td>
-                    <td>{timeEvent.description}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
-        </div>
-      )}
+        )}
 
-      {plusOverlayVisible && (
-        <div className="overlay-sched">
-          <div className="overlay-content-sched">
-            <div className="overlay-header-sched">
-              <h4>Add New Event</h4>
-              <button className="close-button-sched" onClick={closePlusOverlay}>X</button>
-            </div>
-            <div className="overlay-body-sched">
-              <div className="left-side-sched">
-                <div className="form-group-sched">
-                  <label>Event Type:</label>
-                  <input
-                    type="text"
-                    value={eventType}
-                    onChange={(e) => setEventType(e.target.value)}
-                    placeholder="Enter Event Type (e.g., Wedding)"
-                    className="event-type-input-sched"
-                    onClick={() => setShowEventTypes(true)}
-                  />
-                  {showEventTypes && (
-                    <div className="custom-dropdown-sched">
-                      <ul>
-                        {["Wedding", "Meeting", "Party"].map((type) => (
-                          <li 
-                            key={type} 
-                            onClick={() => {
-                              setEventType(type);
-                              setShowEventTypes(false);
-                            }}
-                            className="dropdown-item-sched"
-                          >
-                            {type}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-                <div className="form-group-sched">
-                  <label>Date:</label>
-                  <div className="date-field-sched">
+        {plusOverlayVisible && (
+          <div className="overlay-sched">
+            <div className="overlay-content-sched">
+              <div className="overlay-header-sched">
+                <h4>Add New Event</h4>
+                <button className="close-button-sched" onClick={closePlusOverlay}>X</button>
+              </div>
+              <div className="overlay-body-sched">
+                <div className="left-side-sched">
+                  <div className="form-group-sched">
+                    <label>Event Type:</label>
                     <input
                       type="text"
-                      value={eventDate ? moment(eventDate).format("YYYY-MM-DD") : ''}
-                      placeholder="Select Date"
-                      readOnly
-                      className="date-input-sched"
-                      onClick={() => setShowDatePicker(true)}
+                      value={eventType}
+                      onChange={(e) => setEventType(e.target.value)}
+                      placeholder="Enter Event Type (e.g., Wedding)"
+                      className="event-type-input-sched"
+                      onClick={() => setShowEventTypes(true)}
                     />
-                    <FontAwesomeIcon icon={faCalendar} className="calendar-icon-sched" onClick={() => setShowDatePicker(true)} />
+                    {showEventTypes && (
+                      <div className="custom-dropdown-sched">
+                        <ul>
+                          {["Wedding", "Meeting", "Party"].map((type) => (
+                            <li 
+                              key={type} 
+                              onClick={() => {
+                                setEventType(type);
+                                setShowEventTypes(false);
+                              }}
+                              className="dropdown-item-sched"
+                            >
+                              {type}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
-                  {showDatePicker && (
-                    <DatePicker 
-                      selected={eventDate}
-                      onChange={(date) => {
-                        setEventDate(date);
-                        setShowDatePicker(false);
-                      }}
-                      inline
-                    />
-                  )}
+                  <div className="form-group-sched">
+                    <label>Date:</label>
+                    <div className="date-field-sched">
+                      <input
+                        type="text"
+                        value={eventDate ? moment(eventDate).format("YYYY-MM-DD") : ''}
+                        placeholder="Select Date"
+                        readOnly
+                        className="date-input-sched"
+                        onClick={() => setShowDatePicker(true)}
+                      />
+                      <FontAwesomeIcon icon={faCalendar} className="calendar-icon-sched" onClick={() => setShowDatePicker(true)} />
+                    </div>
+                    {showDatePicker && (
+                      <DatePicker
+                        selected={eventDate ? moment(eventDate).toDate() : null}
+                        onChange={(date) => setEventDate(moment(date).format("YYYY-MM-DD"))}
+                        inline
+                      />
+                    )}
+                  </div>
                 </div>
-                <div className="form-group-sched">
-                  <label>Start Time:</label>
-                  <input
-                    type="time"
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                    className="time-input-sched"
-                  />
-                </div>
-                <div className="form-group-sched">
-                  <label>End Time:</label>
-                  <input
-                    type="time"
-                    value={endTime}
-                    onChange={(e) => setEndTime(e.target.value)}
-                    className="time-input-sched"
-                  />
-                </div>
-              </div>
-              <div className="right-side-sched">
+                <div className="right-side-sched">
                 <h4>Time Frame</h4>
                 <table className="time-frame-table-sched" style={{ borderCollapse: 'collapse' }}>
                   <thead>
