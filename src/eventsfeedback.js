@@ -4,6 +4,10 @@ import { Pie } from 'react-chartjs-2';  // Import Pie chart
 import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar, faMapMarker, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { Chart as ChartJS, ArcElement, CategoryScale, Tooltip, Legend } from 'chart.js';
+
+// Register the necessary chart elements
+ChartJS.register(ArcElement, CategoryScale, Tooltip, Legend);
 
 const initialEventsData = [
   { id: '1', title: 'Mr. & Mrs. Malik Wedding', date: '2024-07-01', address: 'CDO', buttons: ['Feedback'] },
