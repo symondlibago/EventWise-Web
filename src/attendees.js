@@ -3,6 +3,7 @@ import './App.css'; // Import the CSS file for styling
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import API_URL from './apiconfig';
+import Swal from 'sweetalert2';
 
 const Attendees = () => {
   const location = useLocation();
@@ -72,38 +73,73 @@ const Attendees = () => {
 
   const handleStatusChange = async (guest, status) => {
     try {
-      console.log(`Updating status for ${guest.GuestName} to ${status}`);
+        console.log(`Updating status for ${guest.GuestName} to ${status}`);
   
-      // Optimistically update the state (before the API response)
-      setGuests(prevGuests =>
-        prevGuests.map(g =>
-          g.id === guest.id ? { ...g, status: status } : g
-        )
-      );
-  
-      const response = await axios.put(`${API_URL}/api/guest/${guest.id}`, {
-        status: status,
-      });
-  
-      // Log the response to inspect the structure
-      console.log('API Response:', response.data);
-  
-      const updatedGuest = response.data;
-  
-      if (updatedGuest && updatedGuest.id) {
+        // Optimistically update the state (before the API response)
         setGuests(prevGuests =>
-          prevGuests.map(g => (g.id === updatedGuest.id ? updatedGuest : g))
+            prevGuests.map(g =>
+                g.id === guest.id ? { ...g, status: status } : g
+            )
         );
-        alert(`${guest.GuestName} has been marked as ${status}.`);
-      } else {
-        console.error('Updated guest data is missing or malformed:', response.data);
-        alert('Failed to update the status. Please try again.');
-      }
+  
+        const response = await axios.put(`${API_URL}/api/guest/${guest.id}`, {
+            status: status,
+        });
+  
+        // Log the response to inspect the structure
+        console.log('API Response:', response.data);
+  
+        const updatedGuest = response.data;
+  
+        if (updatedGuest && updatedGuest.id) {
+            setGuests(prevGuests =>
+                prevGuests.map(g => (g.id === updatedGuest.id ? updatedGuest : g))
+            );
+
+            // SweetAlert2 success alert
+            Swal.fire({
+              title: 'Success!',
+              text: `${guest.GuestName} has been marked as ${status}.`,
+              icon: 'success',
+              confirmButtonText: 'OK',
+              customClass: {
+                  confirmButton: 'custom-ok-button',
+              },
+              buttonsStyling: false, // Disable default button styling
+          });
+          
+        } else {
+            console.error('Updated guest data is missing or malformed:', response.data);
+
+            // SweetAlert2 error alert
+            Swal.fire({
+                title: 'Error!',
+                text: 'Failed to update the status. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'OK',
+                customClass: {
+                  confirmButton: 'custom-ok-button',
+              },
+              buttonsStyling: false, // Disable default button styling
+            });
+        }
     } catch (error) {
-      console.error('Error updating status:', error);
-      alert('Failed to update the status. Please try again.');
+        console.error('Error updating status:', error);
+
+        // SweetAlert2 error alert
+        Swal.fire({
+            title: 'Error!',
+            text: 'Failed to update the status. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            customClass: {
+              confirmButton: 'custom-ok-button',
+          },
+          buttonsStyling: false, // Disable default button styling
+        });
     }
-  };
+};
+
 
   const presentCount = filteredGuests.filter((guest) => guest.status === 'Present').length;
   const absentCount = filteredGuests.filter((guest) => guest.status === 'Absent').length;

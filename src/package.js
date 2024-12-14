@@ -70,6 +70,10 @@ const Package = () => {
         text: 'Please fill in all fields and select at least one service.',
         icon: 'warning',
         confirmButtonText: 'OK',
+        customClass: {
+          confirmButton: 'custom-ok-button',
+      },
+      buttonsStyling: false,
       });
       return;
     }
@@ -94,6 +98,10 @@ const Package = () => {
           text: 'Package updated successfully!',
           icon: 'success',
           confirmButtonText: 'OK',
+          customClass: {
+            confirmButton: 'custom-ok-button',
+        },
+        buttonsStyling: false,
         });
         navigate('/profile'); // Redirect to profile or another relevant page
       })
@@ -110,6 +118,10 @@ const Package = () => {
           }`,
           icon: 'error',
           confirmButtonText: 'OK',
+          customClass: {
+            confirmButton: 'custom-ok-button',
+        },
+        buttonsStyling: false,
         });
       });
   };
@@ -202,6 +214,10 @@ const Package = () => {
         text: 'Please fill in all fields and select at least one service.',
         icon: 'warning',
         confirmButtonText: 'OK',
+        customClass: {
+          confirmButton: 'custom-ok-button',
+      },
+      buttonsStyling: false,
       });
       return;
     }
@@ -230,6 +246,10 @@ const Package = () => {
           text: 'Package created successfully!',
           icon: 'success',
           confirmButtonText: 'OK',
+          customClass: {
+            confirmButton: 'custom-ok-button',
+        },
+        buttonsStyling: false,
         });
         resetForm(); // Clear form fields after success
       })
@@ -242,6 +262,10 @@ const Package = () => {
             text: `Validation error: ${JSON.stringify(error.response.data.errors)}`,
             icon: 'error',
             confirmButtonText: 'OK',
+            customClass: {
+              confirmButton: 'custom-ok-button',
+          },
+          buttonsStyling: false,
           });
         } else {
           Swal.fire({
@@ -249,6 +273,10 @@ const Package = () => {
             text: 'Failed to create package. Please try again.',
             icon: 'error',
             confirmButtonText: 'OK',
+            customClass: {
+              confirmButton: 'custom-ok-button',
+          },
+          buttonsStyling: false,
           });
         }
       });

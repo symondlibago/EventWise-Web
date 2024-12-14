@@ -505,9 +505,6 @@ button {
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #FFB200;
-}
 
 .overlay-background-dashboard {
   position: absolute;
@@ -574,8 +571,19 @@ button:hover {
   border-radius: 4px;
   color: white;
   font-weight: bold;
+  
 }
-
+.delete-button-dashboard {
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  background-color: red;
+  
+}
 .delete-confirmation-overlay {
   position: fixed;
   top: 0;
@@ -2182,6 +2190,14 @@ font-weight: bold;
   font-weight: bold;
   font-size: 16px;
 }
+
+.custom-ok-button {
+  background-color: #eeab2b !important;
+  color: white !important;
+  border: none !important;
+  font-weight: bold; /* Optional, for emphasis */
+}
+
 
 
 
@@ -4376,6 +4392,10 @@ button:disabled {
   color: #eeba2b; /* Set the color */
   cursor: pointer; /* Make the icons clickable */
   margin-right: 10px; /* Add space between the icons */
+}
+
+.trash-icon {
+  color: red;
 }
 
 .action-icon:last-child {

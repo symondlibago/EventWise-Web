@@ -41,6 +41,10 @@ function Events() {
         text: 'Payment status has been updated successfully.',
         icon: 'success',
         confirmButtonText: 'OK',
+        customClass: {
+          confirmButton: 'custom-ok-button',
+      },
+      buttonsStyling: false,
       });
   
       console.log('Payment status updated', response.data);
@@ -54,6 +58,10 @@ function Events() {
         text: 'Failed to update payment status. Please try again.',
         icon: 'error',
         confirmButtonText: 'OK',
+        customClass: {
+          confirmButton: 'custom-ok-button',
+      },
+      buttonsStyling: false,
       });
     }
   };

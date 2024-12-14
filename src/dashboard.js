@@ -5,6 +5,7 @@ import './App.css';
 import { IoLocationSharp, IoTime } from "react-icons/io5";
 import { FaCalendar } from "react-icons/fa";
 import API_URL from './apiconfig';
+import Swal from 'sweetalert2';
 
 // Packages data
 const packageImages = [
@@ -141,30 +142,68 @@ function Dashboard() {
   };
   const handleConfirmDelete = async (packageToDelete) => {
     try {
-      const response = await fetch(`${API_URL}/api/admin/packages/${packageToDelete.id}`, {
-        method: 'DELETE',
-      });
-  
-      const result = await response.json();
-  
-      if (response.ok) {
-        console.log("Package deleted successfully:", result);
-        // Optionally, refresh the package list after deletion
-        setPackages((prevPackages) =>
-          prevPackages.filter((pkg) => pkg.id !== packageToDelete.id)
-        );
-      } else {
-        console.error("Failed to delete package:", result.message);
-        alert(`Error: ${result.message}`);
-      }
+        const response = await fetch(`${API_URL}/api/admin/packages/${packageToDelete.id}`, {
+            method: 'DELETE',
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            console.log("Package deleted successfully:", result);
+
+            // SweetAlert2 success alert
+            Swal.fire({
+                title: 'Deleted!',
+                text: 'Package deleted successfully!',
+                icon: 'success',
+                confirmButtonText: 'OK',
+                customClass: {
+                  confirmButton: 'custom-ok-button',
+              },
+              buttonsStyling: false,
+            });
+
+            // Optionally, refresh the package list after deletion
+            setShowDetailsOverlay(false)
+            setPackages((prevPackages) =>
+                prevPackages.filter((pkg) => pkg.id !== packageToDelete.id)
+            );
+
+        } else {
+            console.error("Failed to delete package:", result.message);
+
+            // SweetAlert2 error alert
+            Swal.fire({
+                title: 'Error!',
+                text: `Failed to delete package: ${result.message}`,
+                icon: 'error',
+                confirmButtonText: 'OK',
+                customClass: {
+                  confirmButton: 'custom-ok-button',
+              },
+              buttonsStyling: false,
+            });
+        }
     } catch (error) {
-      console.error("Error deleting package:", error);
-      alert("An error occurred while deleting the package.");
+        console.error("Error deleting package:", error);
+
+        // SweetAlert2 error alert
+        Swal.fire({
+            title: 'Error!',
+            text: 'An error occurred while deleting the package.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            customClass: {
+              confirmButton: 'custom-ok-button',
+          },
+          buttonsStyling: false,
+        });
     } finally {
-      setShowDeleteConfirmation(false); // Close the confirmation overlay
-      setPackageToDelete(null); // Reset the state
+        setShowDeleteConfirmation(false); // Close the confirmation overlay
+        setPackageToDelete(null); // Reset the state
     }
-  };
+};
+
   
   
   
