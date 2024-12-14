@@ -329,7 +329,7 @@ function Dashboard() {
             setPackageToDelete(selectedPackage); // Set the selected package for deletion
           }}
         >
-          Delete
+          Disable
         </button>
       </div>
       {showDeleteConfirmation && (
@@ -342,7 +342,7 @@ function Dashboard() {
           className="confirm-delete-button"
           onClick={() => handleConfirmDelete(packageToDelete)}
         >
-          Yes, Delete
+          Yes, Disable
         </button>
         <button
           className="cancel-delete-button"

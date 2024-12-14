@@ -9,6 +9,7 @@ import image3 from './images/event3.png';
 import axios from 'axios';
 import api from './axiosconfig';
 import API_URL from './apiconfig';
+import Swal from 'sweetalert2';
 
 const Package = () => {
   const navigate = useNavigate();
@@ -64,7 +65,12 @@ const Package = () => {
 
   const handleUpdatePackage = () => {
     if (!packageName || !eventType) {
-      alert("Please fill in all fields and select at least one service.");
+      Swal.fire({
+        title: 'Missing Fields',
+        text: 'Please fill in all fields and select at least one service.',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
       return;
     }
   
@@ -79,23 +85,34 @@ const Package = () => {
     };
   
     // Use the axios instance 'api' instead of axios directly
-    api.put(`${API_URL}/api/admin/packages/${location.state.packageDetails.id}`, updatedPackageData)
+    api
+      .put(`${API_URL}/api/admin/packages/${location.state.packageDetails.id}`, updatedPackageData)
       .then((response) => {
         console.log('Package updated successfully:', response.data);
-        alert('Package updated successfully!');
+        Swal.fire({
+          title: 'Success!',
+          text: 'Package updated successfully!',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
         navigate('/profile'); // Redirect to profile or another relevant page
       })
       .catch((error) => {
         console.error('Error updating package:', error.response?.data || error.message);
         const errors = error.response?.data?.errors || {};
-        alert(
-          `Failed to update package. ${
-            Object.keys(errors).length ? Object.values(errors).join(', ') : 'Please try again.'
-          }`
-        );
+  
+        Swal.fire({
+          title: 'Error!',
+          text: `Failed to update package. ${
+            Object.keys(errors).length
+              ? Object.values(errors).join(', ')
+              : 'Please try again.'
+          }`,
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
       });
   };
-  
 
   useEffect(() => {
     // Axios will automatically include the token because of the interceptor in axiosconfig.js
@@ -180,7 +197,12 @@ const Package = () => {
 
   const handleCreatePackage = () => {
     if (!packageName || !eventType) {
-      alert("Please fill in all fields and select at least one service.");
+      Swal.fire({
+        title: 'Missing Fields',
+        text: 'Please fill in all fields and select at least one service.',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
       return;
     }
   
@@ -203,16 +225,31 @@ const Package = () => {
       .post(`${API_URL}/api/admin/packages`, packageData)
       .then((response) => {
         console.log('Package created successfully:', response.data);
-        alert('Package created successfully!');
+        Swal.fire({
+          title: 'Success!',
+          text: 'Package created successfully!',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
         resetForm(); // Clear form fields after success
       })
       .catch((error) => {
         console.error('Error creating package:', error);
         const status = error.response?.status;
         if (status === 422) {
-          alert('Validation error: ' + JSON.stringify(error.response.data.errors));
+          Swal.fire({
+            title: 'Validation Error',
+            text: `Validation error: ${JSON.stringify(error.response.data.errors)}`,
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
         } else {
-          alert('Failed to create package. Please try again.');
+          Swal.fire({
+            title: 'Error!',
+            text: 'Failed to create package. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
         }
       });
   };

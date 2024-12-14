@@ -5,6 +5,7 @@ import axios from 'axios';
 import API_URL from './apiconfig';
 import { FaTrash } from "react-icons/fa";
 import { FaRegEdit } from "react-icons/fa";
+import Swal from 'sweetalert2';
 
 const GroupAttendees = () => {
   const location = useLocation();
@@ -63,25 +64,49 @@ const GroupAttendees = () => {
   };
 
   const handleSaveEdit = async () => {
-    let successMessage = 'Guest details updated successfully!';  
+    let successMessage = 'Guest details updated successfully!';
+  
     if (selectedGuest && selectedGuest.id) {
       try {
         const response = await axios.put(`${API_URL}/api/guest/${selectedGuest.id}`, {
           GuestName: selectedGuest.GuestName,
           role: selectedGuest.role,
           phone: selectedGuest.phone,
-          email: selectedGuest.email
+          email: selectedGuest.email,
         });
-
+  
         const updatedGuest = response.data.guest;
-        setGuests(guests.map(guest => guest.id === updatedGuest.id ? updatedGuest : guest));
+        setGuests(guests.map(guest => (guest.id === updatedGuest.id ? updatedGuest : guest)));
         setEditGuestModalVisible(false);
-      } catch {
-        window.alert(successMessage);
+  
+        // Success alert
+        Swal.fire({
+          title: 'Success!',
+          text: successMessage,
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
+      } catch (error) {
+        console.error('Error updating guest:', error);
+  
+        // Error alert
+        Swal.fire({
+          title: 'Error!',
+          text: 'Failed to update guest details. Please try again.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
       }
     } else {
       console.error('No guest selected or invalid guest data');
-      successMessage = 'Invalid guest data.'; // Change message for invalid data
+  
+      // Invalid data alert
+      Swal.fire({
+        title: 'Invalid Data',
+        text: 'No guest selected or invalid guest data provided.',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
     }
   };
 

@@ -450,14 +450,13 @@ button {
 
 .overlay-content-dashboard-overlay {
   background-color: white;
-  padding: 20px;
+  padding: 40px;
   width: 500px;
   max-width: 90%;
   text-align: center;
   position: relative;
   border: 2px solid #eeba2b;
   border-radius: 10px 0px 10px 0px;
-  
 }
 
 .overlay-content-dashboard-overlay h4, h3 {
@@ -466,12 +465,13 @@ button {
 
 .close-button-dashboard-overlay {
   position: absolute;
-  top: 10px;
+  top: -5px;
   right: 10px;
   background: none;
   border: none;
   font-size: 20px;
   cursor: pointer;
+  color: #FF0000;
 }
 
 .image-dashboard-overlay {

@@ -6,6 +6,7 @@ import { faCalendar, faMapMarker, faHeart, faSearch, faChevronDown, faEllipsisV,
 import axios from 'axios';
 import { IoTime, IoLocationSharp } from "react-icons/io5";
 import { FaCalendar } from "react-icons/fa";
+import Swal from 'sweetalert2';
 
 
 import API_URL from './apiconfig';
@@ -31,15 +32,30 @@ function Events() {
   const handleSaveChanges = async () => {
     try {
       const response = await axios.put(`${API_URL}/api/admin/events/${eventId}/payment-status`, {
-          payment_status: paymentStatus, 
+        payment_status: paymentStatus,
       });
-
-      // Handle success
+  
+      // Success popup
+      Swal.fire({
+        title: 'Success!',
+        text: 'Payment status has been updated successfully.',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      });
+  
       console.log('Payment status updated', response.data);
       closeOverlay();
-  } catch (error) {
+    } catch (error) {
       console.error('Error updating payment status:', error);
-  }
+  
+      // Error popup
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to update payment status. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+    }
   };
 
   function formatTime(timeString) {
