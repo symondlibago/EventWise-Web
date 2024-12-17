@@ -59,7 +59,7 @@ const Group = () => {
         <div className="right-section-group">
           {events.slice(5).map(event => (
             <div key={event.id} className="event-item-group" onClick={() => handleEventClick(event.id)}>
-              <img src={event.cover_photo} alt={event.name} className="event-image-group" />
+              <img src={event.coverPhoto} alt={event.name} className="event-image-group" />
               <div className="event-details-group">
                 <h3 className="event-title-group">{event.name}</h3>
                 <p className="event-date-group">

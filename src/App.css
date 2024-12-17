@@ -1362,6 +1362,43 @@ button {
   margin-top: 20px;
 }
 
+.custom-dropdown-events {
+  position: relative;
+}
+
+.custom-dropdown-btn-events {
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 200px;
+}
+
+.custom-dropdown-content-events {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  top: 100%;
+  left: 0;
+  width: 33%;
+  z-index: 10;
+}
+
+.custom-dropdown-content-events div {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.custom-dropdown-content-events div:hover {
+  background-color: #eeba2b;
+  color: white;
+  transition:0.4s ease;
+}
+
 #payment-status {
   padding: 8px;
   width: 200px;

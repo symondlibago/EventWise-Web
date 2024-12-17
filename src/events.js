@@ -306,16 +306,27 @@ const handleAttendeeClick = (eventId) => {
                 <h2>Event Details</h2>
               </div>
               <div className="detail-group-events">
-          <label htmlFor="paymentStatus">Payment Status: </label>
-          <select
-            id="paymentStatus"
-            value={paymentStatus}
-            onChange={handlePaymentStatusChange}
-          >
-            <option value="Downpayment">Downpayment</option>
-            <option value="Paid">Paid</option>
-          </select>
+  <label htmlFor="paymentStatus">Payment Status: </label>
+  <div className="custom-dropdown-events">
+    <button
+      className="custom-dropdown-btn-events"
+      onClick={() => setShowPaymentStatusDropdown(!showPaymentStatusDropdown)}
+    >
+      {paymentStatus || 'Select Payment Status'}
+      <FontAwesomeIcon icon={faChevronDown} />
+    </button>
+    {showPaymentStatusDropdown && (
+      <div className="custom-dropdown-content-events">
+        <div onClick={() => { setPaymentStatus('Downpayment'); setShowPaymentStatusDropdown(false); }}>
+          Downpayment
         </div>
+        <div onClick={() => { setPaymentStatus('Paid'); setShowPaymentStatusDropdown(false); }}>
+          Paid
+        </div>
+      </div>
+    )}
+  </div>
+</div>
 
         
 
