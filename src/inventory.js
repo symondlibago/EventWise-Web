@@ -20,7 +20,7 @@ const Inventory = () => {
       }
 
       try {
-        const response = await fetch(`${API_URL}/api/equipment?event_id=${eventId}`);
+        const response = await fetch(`${API_URL}/api/equipment/${eventId}`);
         const data = await response.json();
         console.log('Fetched Inventory Data:', data); // Log the fetched data
         setInventory(data); // Update the inventory state with fetched data
@@ -32,7 +32,7 @@ const Inventory = () => {
     fetchInventory();
   }, [eventId]); // Fetch data whenever eventId changes
   
-  const totalItems = inventory.reduce((sum, item) => sum + item.number_of_items, 0);
+  const totalItems = inventory.reduce((sum, item) => sum + item.total_items, 0);
   const totalBroken = inventory.filter(item => item.status === "Broken").length;
   const totalMissing = inventory.filter(item => item.status === "Missing").length;
 
@@ -67,9 +67,9 @@ const Inventory = () => {
           {inventory.length > 0 ? ( // Check if inventory is available
             inventory.map((item) => (
               <div key={item.id} className="table-row-inventory">
-                <div className="table-row-text-inventory">{item.item}</div>
-                <div className="table-row-text-inventory">{item.number_of_items}</div>
-                <div className="table-row-text-inventory">{item.number_of_sort_items}</div>
+                <div className="table-row-text-inventory">{item.item_name}</div>
+                <div className="table-row-text-inventory">{item.total_items}</div>
+                <div className="table-row-text-inventory">{item.sorted_items}</div>
                 <div className="table-row-text-inventory" style={getStatusStyle(item.status)}>
                   {item.status || 'Unknown'}
                 </div>
