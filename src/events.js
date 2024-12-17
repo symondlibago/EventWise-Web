@@ -22,12 +22,9 @@ function Events() {
   const [showOverlay, setShowOverlay] = useState(false);
   const [eventId, setEventId] = useState(null);
   const [paymentStatus, setPaymentStatus] = useState('');
+  const [showPaymentStatusDropdown, setShowPaymentStatusDropdown] = useState(false);
   const navigate = useNavigate();
 
-
-  const handlePaymentStatusChange = (e) => {
-    setPaymentStatus(e.target.value);
-  };
 
   const handleSaveChanges = async () => {
     try {
