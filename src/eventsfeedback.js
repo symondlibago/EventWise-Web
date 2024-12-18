@@ -171,7 +171,14 @@ function EventsFeedback() {
             if (event.id === selectedEventFeedback[0]?.event_id) {
               return (
                 <div key={event.id}>
-                  <h3>Feedback for Event: {event.name}</h3>
+                  <h3
+                  style={{
+                            color: 'black',
+                            fontSize: '20px',
+                            marginBottom: '20px',
+                            textDecoration: 'underline',
+                          }}
+                  >Feedback for Event: {event.name}</h3>
                   {Object.entries(selectedEventFeedback[0]).map(([key, value]) => {
                     // Filter out services with zero sentiments (where compound, pos, neu, neg are 0.0)
                     if (key.includes('sentiment') && value?.compound !== undefined) {
@@ -207,16 +214,18 @@ function EventsFeedback() {
                         return (
                           (positiveCount || neutralCount || negativeCount) > 0 && (
                             <div key={key}>
-                              <h4
-                                style={{
-                                  cursor: 'pointer',
-                                  color: 'green', // You can customize based on the sentiment label
-                                }}
-                                onClick={() => toggleDetails(formattedServiceName)}
-                              >
-                                {formattedServiceName} Sentiment:
-                                Positive: {positiveCount} Neutral: {neutralCount} Negative: {negativeCount}
-                              </h4>
+                            <h4
+                          style={{
+                            cursor: 'pointer',
+                            color: 'black', // Food_catering Sentiment is black
+                          }}
+                          onClick={() => toggleDetails(formattedServiceName)}
+                        >
+                          {formattedServiceName} Sentiment: 
+                          <span style={{ color: 'green' }}> Positive: {positiveCount} </span>
+                          <span style={{ color: '#FFD700' }}> Neutral: {neutralCount} </span>
+                          <span style={{ color: 'red' }}> Negative: {negativeCount} </span>
+                        </h4>
 
                               {detailsVisibility[formattedServiceName] && (
                                 <div style={{ marginLeft: '20px', color: '#555' }}>
