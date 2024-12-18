@@ -1,40 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { Pie } from 'react-chartjs-2';  // Import Pie chart
+import { Pie } from 'react-chartjs-2';
 import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar, faMapMarker, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Chart as ChartJS, ArcElement, CategoryScale, Tooltip, Legend } from 'chart.js';
 import API_URL from './apiconfig';
 
-
 // Register the necessary chart elements
 ChartJS.register(ArcElement, CategoryScale, Tooltip, Legend);
 
 function EventsFeedback() {
   const [search, setSearch] = useState('');
-  const [events, setEvents] = useState([]);  // State to hold events data
-  const [filteredEvents, setFilteredEvents] = useState([]);  // State for filtered events
-  const [loading, setLoading] = useState(true);  // Loading state
-  const navigate = useNavigate();
+  const [events, setEvents] = useState([]);
+  const [feedbacks, setFeedbacks] = useState([]);
+  const [sentimentData, setSentimentData] = useState([]);  // Added state for sentiment counts
+  const [filteredEvents, setFilteredEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedEventFeedback, setSelectedEventFeedback] = useState(null);
+  const [detailsVisibility, setDetailsVisibility] = useState({}); // Track details visibility for each service
 
-  // Fetch events on component mount
+  const toggleDetails = (serviceName) => {
+    setDetailsVisibility(prevState => ({
+      ...prevState,
+      [serviceName]: !prevState[serviceName],
+    }));
+  };
+
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchEventsAndFeedbacks = async () => {
       try {
-        const response = await axios.get(`${API_URL}/api/events`);
-        setEvents(response.data);
-        setFilteredEvents(response.data);  // Set filteredEvents with the fetched data
+        const eventResponse = await axios.get(`${API_URL}/api/events`);
+        const feedbackResponse = await axios.get('https://eventwise-eventmanagementsystem.onrender.com/get_feedback');
+        const sentimentResponse = await axios.get('https://eventwise-eventmanagementsystem.onrender.com/get_events_with_sentiment_counts');  // Fetch sentiment counts
+        
+        setEvents(eventResponse.data);
+        setFeedbacks(feedbackResponse.data);
+        setSentimentData(sentimentResponse.data.events);  // Store sentiment data
+        setFilteredEvents(eventResponse.data);
       } catch (error) {
-        console.error("Error fetching events data:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchEvents();
-  }, []); // Empty dependency array ensures this runs only once
+    fetchEventsAndFeedbacks();
+  }, []);
 
   const handleSearch = (text) => {
     setSearch(text);
@@ -46,74 +59,88 @@ function EventsFeedback() {
       });
       setFilteredEvents(newData);
     } else {
-      setFilteredEvents(events);  // Reset filtered events when search is cleared
+      setFilteredEvents(events);
     }
   };
 
-  const handleDelete = (eventId) => {
-    const newData = filteredEvents.filter((item) => item.id !== eventId);
-    setFilteredEvents(newData);
+  const handleOpenModal = (eventId) => {
+    const feedbackForEvent = feedbacks.filter(feedback => feedback.event_id === eventId);
+    if (feedbackForEvent.length > 0) {
+      setSelectedEventFeedback(feedbackForEvent);
+      setShowModal(true);
+    } else {
+      console.log("No feedback found for event with ID:", eventId);
+    }
   };
 
-  // Pie chart data configuration
-  const pieData = {
-    labels: ['Positive', 'Negative', 'Neutral'],
-    datasets: [
-      {
-        label: 'Feedback',
-        data: [65, 20, 15], // Example data
-        backgroundColor: ['green', 'red', 'yellow'], // Example colors
-        hoverBackgroundColor: ['green', 'red', 'yellow'],
-      },
-    ],
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedEventFeedback(null);
   };
 
-  // Pie chart options to adjust size
-  const pieOptions = {
-    width: 150, // Adjust width as needed
-    height: 150, // Adjust height as needed
-    maintainAspectRatio: false, // Prevents the chart from maintaining aspect ratio
-  };
+  const renderEventItem = (item) => {
+    // Get sentiment data for the event
+    const sentimentForEvent = sentimentData.find(sentiment => sentiment.event_id === item.id) || { positive: 0, negative: 0, neutral: 0 };
 
-  const renderEventItem = (item) => (
-    <div key={item.id} className="item-container-eventfeedback">
-      <div className="pie-chart-container-eventfeedback">
-        <Pie data={pieData} options={pieOptions} /> {/* Apply options to Pie chart */}
-      </div>
-      <h3 className="title-eventfeedback">{item.name}</h3>
-      <div className="detail-container-eventfeedback">
-        <div className="detail-row-eventfeedback">
-          <FontAwesomeIcon icon={faCalendar} size="lg" color="#eeba2b" />
-          <span className="detail-text-eventfeedback">{item.date}</span>
+    // Check if there's any sentiment data
+    if (sentimentForEvent.positive === 0 && sentimentForEvent.negative === 0 && sentimentForEvent.neutral === 0) {
+      return null;
+    }
+
+    return (
+      <div key={item.id} className="item-container-eventfeedback">
+        <div className="pie-chart-container-eventfeedback">
+          {sentimentForEvent ? (
+            <Pie
+              data={{
+                labels: ['Positive', 'Negative', 'Neutral'],
+                datasets: [
+                  {
+                    data: [
+                      sentimentForEvent.positive,
+                      sentimentForEvent.negative,
+                      sentimentForEvent.neutral,
+                    ],
+                    backgroundColor: ['green', 'red', 'yellow'],
+                    hoverBackgroundColor: ['green', 'red', 'yellow'],
+                  },
+                ],
+              }}
+              options={{
+                width: 150,
+                height: 150,
+                maintainAspectRatio: false,
+              }}
+            />
+          ) : (
+            <div className="no-feedback-message">No feedback available</div>
+          )}
         </div>
-        <div className="detail-row-eventfeedback">
-          <FontAwesomeIcon icon={faMapMarker} size="lg" color="#eeba2b" />
-          <span className="detail-text-eventfeedback">{item.location}</span>
+        <h3 className="title-eventfeedback">{item.name}</h3>
+        <div className="detail-container-eventfeedback">
+          <div className="detail-row-eventfeedback">
+            <FontAwesomeIcon icon={faCalendar} size="lg" color="#eeba2b" />
+            <span className="detail-text-eventfeedback">{item.date}</span>
+          </div>
+          <div className="detail-row-eventfeedback">
+            <FontAwesomeIcon icon={faMapMarker} size="lg" color="#eeba2b" />
+            <span className="detail-text-eventfeedback">{item.location}</span>
+          </div>
         </div>
-      </div>
-      <div className="buttons-container-eventfeedback">
-        {(item.buttons || []).map((button, index) => (  // Default to empty array if item.buttons is undefined
+        <div className="buttons-container-eventfeedback">
           <button
-            key={index}
             className="button-eventfeedback"
-            onClick={() => {
-              if (button === 'Delete') {
-                handleDelete(item.id);
-              } else if (button === 'Feedback') {
-                navigate('/feedback/feedback-events');
-              }
-            }}
+            onClick={() => handleOpenModal(item.id)}
           >
-            {button}
+            Feedback
           </button>
-        ))}
+        </div>
       </div>
-    </div>
-  );
-  
+    );
+  };
 
   if (loading) {
-    return <div>Loading events...</div>; // Show loading message while data is being fetched
+    return <div>Loading events...</div>;
   }
 
   return (
@@ -133,6 +160,91 @@ function EventsFeedback() {
           {filteredEvents.map(renderEventItem)}
         </div>
       </div>
+
+      {showModal && selectedEventFeedback && (
+  <div className="overlay-feedback">
+    <div className="modal-feedback">
+      <button className="close-button-feedback" onClick={handleCloseModal}>X</button>
+      <div className="feedback-content">
+        {events && events.length > 0 &&
+          events.map(event => {
+            if (event.id === selectedEventFeedback[0]?.event_id) {
+              return (
+                <div key={event.id}>
+                  <h3>Feedback for Event: {event.name}</h3>
+                  {Object.entries(selectedEventFeedback[0]).map(([key, value]) => {
+                    // Filter out services with zero sentiments (where compound, pos, neu, neg are 0.0)
+                    if (key.includes('sentiment') && value?.compound !== undefined) {
+                      const serviceName = key.replace('_sentiment', '').replace(/([A-Z])/g, ' $1');
+                      const formattedServiceName = serviceName.charAt(0).toUpperCase() + serviceName.slice(1);
+                      
+                      // Check if the sentiment is real (not zero values)
+                      const sentiment = value;
+                      if (sentiment.compound !== 0.0 || sentiment.pos !== 0.0 || sentiment.neu !== 0.0 || sentiment.neg !== 0.0) {
+                        // Count sentiments for the specific service
+                        let positiveCount = 0;
+                        let neutralCount = 0;
+                        let negativeCount = 0;
+                        let customerNames = [];
+
+                        selectedEventFeedback.forEach(feedback => {
+                          if (feedback[`${serviceName.toLowerCase()}_sentiment`]?.label === 'positive') {
+                            positiveCount++;
+                          }
+                          if (feedback[`${serviceName.toLowerCase()}_sentiment`]?.label === 'neutral') {
+                            neutralCount++;
+                          }
+                          if (feedback[`${serviceName.toLowerCase()}_sentiment`]?.label === 'negative') {
+                            negativeCount++;
+                          }
+
+                          // Collect customer names for feedback
+                          if (feedback[`${serviceName.toLowerCase()}_feedback`]) {
+                            customerNames.push(feedback.customer_name || 'Unknown');
+                          }
+                        });
+
+                        return (
+                          (positiveCount || neutralCount || negativeCount) > 0 && (
+                            <div key={key}>
+                              <h4
+                                style={{
+                                  cursor: 'pointer',
+                                  color: 'green', // You can customize based on the sentiment label
+                                }}
+                                onClick={() => toggleDetails(formattedServiceName)}
+                              >
+                                {formattedServiceName} Sentiment:
+                                Positive: {positiveCount} Neutral: {neutralCount} Negative: {negativeCount}
+                              </h4>
+
+                              {detailsVisibility[formattedServiceName] && (
+                                <div style={{ marginLeft: '20px', color: '#555' }}>
+                                  <p><strong>Customer Names:</strong> {customerNames.join(', ')}</p>
+                                  {customerNames.map((name, index) => (
+                                    <div key={index}>
+                                      <p><strong>{name} Feedback:</strong> {selectedEventFeedback[index][`${serviceName.toLowerCase()}_feedback`] || 'No feedback provided'}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          )
+                        );
+                      }
+                    }
+                    return null;
+                  })}
+                </div>
+              );
+            }
+            return null;
+          })
+        }
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }

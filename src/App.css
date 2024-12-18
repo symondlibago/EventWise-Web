@@ -238,6 +238,33 @@ body, html, #root {
   margin-left: 9rem;
 }
 
+.event-overlay {
+  position: absolute;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  max-height: 200px;
+  width: 150px;
+  overflow-y: auto;
+  cursor: pointer;
+}
+
+.event-overlay ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.event-overlay li {
+  margin-bottom: 5px;
+}
+
 .packages-section-dashboard {
   width: 100%;
   padding: 20px;
@@ -283,7 +310,6 @@ body, html, #root {
   transform: scale(1.02); /* Slightly enlarge on hover */
   border-color: #eeba2b; /* Change border color on hover */
   animation: border-glow 1.5s infinite linear; /* Apply animation */
-  cursor: pointer;
 }
 
 /* Keyframes for border animation */
@@ -450,13 +476,14 @@ button {
 
 .overlay-content-dashboard-overlay {
   background-color: white;
-  padding: 40px;
+  padding: 20px;
   width: 500px;
   max-width: 90%;
   text-align: center;
   position: relative;
   border: 2px solid #eeba2b;
   border-radius: 10px 0px 10px 0px;
+  
 }
 
 .overlay-content-dashboard-overlay h4, h3 {
@@ -465,13 +492,12 @@ button {
 
 .close-button-dashboard-overlay {
   position: absolute;
-  top: -5px;
+  top: 10px;
   right: 10px;
   background: none;
   border: none;
   font-size: 20px;
   cursor: pointer;
-  color: #FF0000;
 }
 
 .image-dashboard-overlay {
@@ -505,6 +531,9 @@ button {
   cursor: pointer;
 }
 
+button:hover {
+  background-color: #FFB200;
+}
 
 .overlay-background-dashboard {
   position: absolute;
@@ -571,19 +600,8 @@ button {
   border-radius: 4px;
   color: white;
   font-weight: bold;
-  
 }
-.delete-button-dashboard {
-  padding: 8px 16px;
-  font-size: 14px;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
-  color: white;
-  font-weight: bold;
-  background-color: red;
-  
-}
+
 .delete-confirmation-overlay {
   position: fixed;
   top: 0;
@@ -1357,11 +1375,6 @@ button {
   color: #eeba2b;
 }
 
-
-.payment-status-group {
-  margin-top: 20px;
-}
-
 .custom-dropdown-events {
   position: relative;
 }
@@ -1397,6 +1410,12 @@ button {
   background-color: #eeba2b;
   color: white;
   transition:0.4s ease;
+}
+
+
+
+.payment-status-group {
+  margin-top: 20px;
 }
 
 #payment-status {
@@ -2227,14 +2246,6 @@ font-weight: bold;
   font-weight: bold;
   font-size: 16px;
 }
-
-.custom-ok-button {
-  background-color: #eeab2b !important;
-  color: white !important;
-  border: none !important;
-  font-weight: bold; /* Optional, for emphasis */
-}
-
 
 
 
@@ -4066,31 +4077,6 @@ textarea.text-input-addrole {
   margin: 2px 0;
 }
 
-.detail-text-eventfeedback {
-  font-size: 14px;
-  color: #555;
-  margin-left: 5px;
-}
-
-.heart-icon-eventfeedback {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: #DADADA;
-  border-radius: 50%;
-  width: 26px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #000;
-  cursor: pointer;
-}
-
-.heart-liked-eventfeedback {
-  background-color: #FF0000;
-}
-
 .buttons-container-eventfeedback {
   display: flex;
   flex-wrap: wrap;
@@ -4098,16 +4084,16 @@ textarea.text-input-addrole {
   margin-top: 10px;
 }
 
-.button-eventfeedback {
-  background-color: #FFC42B;
-  border-radius: 5px;
-  padding: 5px 10px;
-  margin: 5px;
-  border: none;
-  font-family: 'Poppins', sans-serif;
-  color: #000;
-  cursor: pointer;
-}
+  .button-eventfeedback {
+    background-color: #FFC42B;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 5px;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    color: #000;
+    cursor: pointer;
+  }
 
 /* Responsive adjustments */
 @media (max-width: 1200px) {
@@ -4131,6 +4117,61 @@ textarea.text-input-addrole {
 .pie-chart-container-eventfeedback {
   display: flex;
   justify-content: center;}
+
+  .overlay-feedback {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-feedback {
+    position: relative;  
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-height: 80%;
+    max-width: 90%;
+    width: 400px;  
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+  
+  .feedback-content {
+    max-height: calc(100vh - 20px);
+    overflow-y: auto;
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+  }
+  
+  .modal-feedback::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .close-button-feedback {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    color: red;
+    cursor: pointer;
+  }
+  
+  .close-button-feedback:hover {
+    background: transparent;
+  }
+  
+  
+  
+  
 
 
 
@@ -4431,10 +4472,6 @@ button:disabled {
   margin-right: 10px; /* Add space between the icons */
 }
 
-.trash-icon {
-  color: red;
-}
-
 .action-icon:last-child {
   margin-right: 0; /* Remove the margin on the last icon */
 }
@@ -4699,8 +4736,6 @@ button:disabled {
 }
 
 
-
-/* SCHEDULE PAGE */
 
 /* SCHEDULE */
 

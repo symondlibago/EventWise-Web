@@ -1,94 +1,68 @@
-import React from 'react';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 const Feedback = () => {
-  const feedbackData = {
-    total: 100,
-    positive: 50,
-    neutral: 30,
-    negative: 20,
-  };
+  const [feedbackData, setFeedbackData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { eventId } = useParams();  // Get event_id from URL
 
-  const serviceProviders = [
-    { role: 'Photographer', positive: 70, neutral: 20, negative: 10 },
-    { role: 'Videographer', positive: 50, neutral: 30, negative: 20 },
-    { role: 'Makeup Artist', positive: 80, neutral: 10, negative: 10 },
-    { role: 'DJ', positive: 90, neutral: 5, negative: 5 },
-    { role: 'Caterer', positive: 40, neutral: 30, negative: 30 },
-    { role: 'Florist', positive: 60, neutral: 20, negative: 20 },
-  ];
+  useEffect(() => {
+    // Fetch feedback data from the API based on event_id
+    setLoading(true); // Start loading state
+    fetch(`https://eventwise-eventmanagementsystem.onrender.com/get_feedback/${eventId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setFeedbackData(data);
+        setLoading(false); // Stop loading when data is fetched
+      })
+      .catch((error) => {
+        console.error('Error fetching feedback data:', error);
+        setError('Failed to load feedback data.');
+        setLoading(false);
+      });
+  }, [eventId]); // Re-fetch if eventId changes
+
+  if (loading) {
+    return <div>Loading feedback data...</div>; // Show loading message
+  }
+
+  if (error) {
+    return <div>{error}</div>; // Show error message if there's a problem fetching data
+  }
 
   return (
-    <div className="gradient-container">
-      <div className="container-feedback">
-        <h1 className="sentiment-analysis-feedback">Sentiment Analysis</h1>
-        <div className="line-feedback" />
+    <div style={{ padding: '20px' }}>
+      {feedbackData.length > 0 ? (
+        feedbackData.map((feedback, index) => (
+          <div key={index} style={{ marginBottom: '20px' }}>
+            <h3>Feedback for Event {feedback.event_id}</h3>
+            <p><strong>Customer:</strong> {feedback.customer_name}</p>
 
-        <h2 className="welcome-text-feedback">Welcome back, Arvil!</h2>
-
-        <div className="summary-feedback">
-          <h3>Summary</h3>
-          <div className="feedback-summary-container-feedback">
-            <div className="feedback-summary-box-feedback positive-box-feed">
-              <p>Total Feedback</p>
-              <p>{feedbackData.total}</p>
+            <div>
+              <h4>Accommodation Sentiment: {feedback.accommodation_sentiment.label}</h4>
+              <p>{feedback.accommodation_feedback}</p>
             </div>
-            <div className="feedback-summary-box-feedback positive-box-feed">
-              <p>Positive</p>
-              <p>{feedbackData.positive}</p>
+            <div>
+              <h4>Catering Sentiment: {feedback.catering_sentiment.label}</h4>
+              <p>{feedback.catering_feedback}</p>
             </div>
-            <div className="feedback-summary-box-feedback neutral-box-feed">
-              <p>Neutral</p>
-              <p>{feedbackData.neutral}</p>
+            <div>
+              <h4>Food Catering Sentiment: {feedback.food_catering_sentiment.label}</h4>
+              <p>{feedback.food_catering_feedback}</p>
             </div>
-            <div className="feedback-summary-box-feedback negative-box-feed">
-              <p>Negative</p>
-              <p>{feedbackData.negative}</p>
+            <div>
+              <h4>Event Sentiment: {feedback.event_sentiment.label}</h4>
+              <p>{feedback.event_feedback}</p>
+            </div>
+            <div>
+              <h4>Overall Sentiment: {feedback.overall_sentiment}</h4>
             </div>
           </div>
-        </div>
-
-        <div className="big-box-feedback">
-          <div className="big-box-header-feedback">
-            <h3 className="big-box-header-left-feedback">Service Providers</h3>
-            <h3 className="big-box-header-right-feedback">Ratings</h3>
-          </div>
-          <table className="service-providers-table-feedback">
-            <thead>
-              <tr>
-                <th>Service Provider</th>
-                <th>Ratings</th>
-              </tr>
-            </thead>
-            <tbody>
-              {serviceProviders.map((provider, index) => (
-                <tr key={index}>
-                  <td>{provider.role}</td>
-                  <td>
-                    <div className="rating-bar-container-feedback">
-                      <div
-                        className="rating-bar-feedback positive"
-                        style={{ width: `${provider.positive}%` }}
-                        title={`${provider.positive}% Positive`}
-                      ></div>
-                      <div
-                        className="rating-bar-feedback neutral"
-                        style={{ width: `${provider.neutral}%` }}
-                        title={`${provider.neutral}% Neutral`}
-                      ></div>
-                      <div
-                        className="rating-bar-feedback negative"
-                        style={{ width: `${provider.negative}%` }}
-                        title={`${provider.negative}% Negative`}
-                      ></div>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+        ))
+      ) : (
+        <p>No feedback available for this event.</p>
+      )}
     </div>
   );
 };

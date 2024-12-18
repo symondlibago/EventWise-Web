@@ -5,6 +5,7 @@ import './App.css';
 import { IoLocationSharp } from "react-icons/io5";
 import { FaCalendar } from "react-icons/fa";
 import API_URL from './apiconfig';
+import defaultImage from './images/default.png'; // Import the default image
 
 const Group = () => {
   const [events, setEvents] = useState([]);
@@ -26,8 +27,8 @@ const Group = () => {
 
   const handleEventClick = (eventId) => {
     navigate('/group-attendees', { state: { eventId } });
-  
   };
+
   return (
     <div className="container-group">
       <h1 className="title-group">Groups</h1>
@@ -36,14 +37,15 @@ const Group = () => {
         <div className="left-section-group">
           {events.slice(0, 5).map(event => (
             <div key={event.id} className="event-item-group" onClick={() => handleEventClick(event.id)}>
-              <img src={event.cover_photo} alt={event.name} className="event-image-group" />
+              {/* Static cover photo */}
+              <img src={defaultImage} alt={event.name} className="event-image-group" />
               <div className="event-details-group">
                 <h3 className="event-title-group">{event.name}</h3>
                 <p className="event-date-group">
-                <FaCalendar className="icon-group" /> {event.date}
+                  <FaCalendar className="icon-group" /> {event.date}
                 </p>
                 <div className="event-location-group">
-                <IoLocationSharp className="icon-group" />
+                  <IoLocationSharp className="icon-group" />
                   <p className="event-address-group">{event.location}</p>
                 </div>
               </div>
@@ -59,14 +61,15 @@ const Group = () => {
         <div className="right-section-group">
           {events.slice(5).map(event => (
             <div key={event.id} className="event-item-group" onClick={() => handleEventClick(event.id)}>
-              <img src={event.coverPhoto} alt={event.name} className="event-image-group" />
+              {/* Static cover photo */}
+              <img src={defaultImage} alt={event.name} className="event-image-group" />
               <div className="event-details-group">
                 <h3 className="event-title-group">{event.name}</h3>
                 <p className="event-date-group">
-                <FaCalendar className="icon-group" /> {event.date}
+                  <FaCalendar className="icon-group" /> {event.date}
                 </p>
                 <div className="event-location-group">
-                <IoLocationSharp className="icon-group" />
+                  <IoLocationSharp className="icon-group" />
                   <p className="event-address-group">{event.location}</p>
                 </div>
               </div>
