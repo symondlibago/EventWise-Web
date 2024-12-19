@@ -85,7 +85,7 @@ const Profile = () => {
 
   const renderEventItem = (item) => (
     <div className="event-item-profile" key={item.id}>
-      <img src={getRandomImage()} alt={item.title} className="image-profile" />
+      <img src={getRandomImage()  } alt={item.title} className="image-profile" />
       <h3 className="title-profile">{item.name}</h3>
       <div className="detail-container-profile">
         <div className="detail-row-profile">
