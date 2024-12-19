@@ -6,8 +6,9 @@ import { IoLocationSharp, IoTime } from "react-icons/io5";
 import { FaCalendar } from "react-icons/fa";
 import API_URL from './apiconfig';
 import Swal from 'sweetalert2';
+import defaultImage from './images/default.png'; // Import the default image
 
-// Packages data
+
 const packageImages = [
   require('./images/event1.png'),
   require('./images/event2.png'),
@@ -237,7 +238,7 @@ function Dashboard() {
       <div className="events-list-container-dashboard-left">
         {selectedDayEvents.map((event, index) => (
           <div className="event-card-dashboard" key={index} onClick={() => navigate('/events')}>
-            <img src={event.coverPhoto} alt="Event Cover" className="event-cover-dashboard" />
+            <img src={defaultImage} alt="Event Cover" className="event-cover-dashboard" />
             <div className="event-info-dashboard">
               <p className="event-name-dashboard">{event.name.charAt(0).toUpperCase() + event.name.slice(1)}</p>
               <div className="event-detail-dashboard">

@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import profilePic from './images/pro_pic.png';
 import axios from 'axios';
 import API_URL from './apiconfig';
+import defaultImage from './images/default.png'; // Import the default image
+
 
 const months = [
   'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
@@ -71,7 +73,7 @@ const Profile = () => {
 
   const renderEventItem = (item) => (
     <div className="event-item-profile" key={item.id}>
-      <img src={item.coverPhoto} alt={item.title} className="image-profile" />
+      <img src={defaultImage} alt={item.title} className="image-profile" />
       <h3 className="title-profile">{item.name}</h3>
       <div className="detail-container-profile">
         <div className="detail-row-profile">

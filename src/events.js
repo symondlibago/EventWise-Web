@@ -7,6 +7,8 @@ import axios from 'axios';
 import { IoTime, IoLocationSharp } from "react-icons/io5";
 import { FaCalendar } from "react-icons/fa";
 import Swal from 'sweetalert2';
+import defaultImage from './images/default.png'; // Import the default image
+
 
 
 import API_URL from './apiconfig';
@@ -194,7 +196,7 @@ const handleAttendeeClick = (eventId) => {
 
     return (
       <div key={item.id} className="item-container-events">
-      <img src={coverPhotoUrl} alt={item.name} className="image-events" />
+      <img src={defaultImage} alt={item.name} className="image-events" />
       <h3 className="title-events">{item.name}</h3>
       <div className="detail-container-events">
         <div className="event-detail-dashboard">
