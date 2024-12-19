@@ -14,6 +14,12 @@ const packageImages = [
   require('./images/event2.png'),
   require('./images/event3.png')
 ];
+const Images = [
+  require('./images/pic1.jpg'),
+  require('./images/pic2.jpg'),
+  require('./images/pic3.jpg'),
+  require('./images/pic4.png')
+];
 
 const packageDescriptions = [
   "This package offers a comprehensive solution for your event needs. With top-notch services and amenities, Package ensures a memorable experience for all your guests.",
@@ -35,6 +41,11 @@ function Dashboard() {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [packageToDelete, setPackageToDelete] = useState(null); // Track the selected package to delete
   const navigate = useNavigate();
+
+  const getRandomImage = () => {
+    const randomIndex = Math.floor(Math.random() * Images.length);
+    return Images[randomIndex];
+  };
 
   function formatTime(timeString) {
     if (!timeString) return ''; // Handle undefined or empty input early
@@ -238,7 +249,7 @@ function Dashboard() {
       <div className="events-list-container-dashboard-left">
         {selectedDayEvents.map((event, index) => (
           <div className="event-card-dashboard" key={index} onClick={() => navigate('/events')}>
-            <img src={defaultImage} alt="Event Cover" className="event-cover-dashboard" />
+            <img src={getRandomImage()} alt="Event Cover" className="event-cover-dashboard" />
             <div className="event-info-dashboard">
               <p className="event-name-dashboard">{event.name.charAt(0).toUpperCase() + event.name.slice(1)}</p>
               <div className="event-detail-dashboard">

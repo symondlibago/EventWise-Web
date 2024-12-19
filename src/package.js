@@ -433,10 +433,10 @@ const Package = () => {
 
                     <img src={service.image} alt={service.serviceName} className="service-image-overlay" />
                     <div className="service-details-overlay">
-                      <h4>{service.serviceName}</h4>
-                      <p>{service.serviceCategory}</p>
-                      <p>{service.basePrice}</p>
-                      <p>{service.pax}</p>
+                      <h4 style={{ color: '#eeba2b' }}>Service: {service.serviceName}</h4>
+                      <p>Category:{service.serviceCategory}</p>
+                      <p>Price: {service.basePrice}</p>
+                      <p>Pax: {service.pax}</p>
                     </div>
                     <button className="select-service-overlay" onClick={() => handleServiceSelect(service)}>
                       Select Service

@@ -6,10 +6,22 @@ import { IoLocationSharp } from "react-icons/io5";
 import { FaCalendar } from "react-icons/fa";
 import API_URL from './apiconfig';
 import defaultImage from './images/default.png'; // Import the default image
+const Images = [
+  require('./images/pic1.jpg'),
+  require('./images/pic2.jpg'),
+  require('./images/pic3.jpg'),
+  require('./images/pic4.png')
+];
+
 
 const Group = () => {
   const [events, setEvents] = useState([]);
   const navigate = useNavigate();
+
+  const getRandomImage = () => {
+    const randomIndex = Math.floor(Math.random() * Images.length);
+    return Images[randomIndex];
+  };
 
   // Fetch events from the Laravel API
   useEffect(() => {
@@ -38,7 +50,7 @@ const Group = () => {
           {events.slice(0, 5).map(event => (
             <div key={event.id} className="event-item-group" onClick={() => handleEventClick(event.id)}>
               {/* Static cover photo */}
-              <img src={defaultImage} alt={event.name} className="event-image-group" />
+              <img src={getRandomImage()} alt={event.name} className="event-image-group" />
               <div className="event-details-group">
                 <h3 className="event-title-group">{event.name}</h3>
                 <p className="event-date-group">
