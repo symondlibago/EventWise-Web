@@ -1,70 +1,65 @@
-# Getting Started with Create React App
+- # _A Mobile and Web based Event Management System with Aspect-based Sentiment Analysis_
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+  **Description:** Lorem Ipsum solom not bor ode
 
-## Available Scripts
+  ## Table of Contents
 
-In the project directory, you can run:
+  1. Prerequisites
+  2. Backend Setup (Laravel) - Clone Repository - Install Dependencies - Environment Configuration - Database Setup - Run Migrations - Start Laravel Server with specific channel
+  3. Frontend Setup (React Native) - Clone Repository - Install Dependencies - Environment Configuration - Run the App with specific channel
 
-### `npm start`
+  ##
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+  ## Prerequisites Ensure you have the following installed on your computer:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+  - **Node.js** (v14.x or higher)
+  - **npm** (v6.x or higher) or **Yarn** (v1.22.x or higher)
+  - **PHP** (v7.4 or higher)
+  - **Composer**
+  - **Laravel Installer**
+  - **MySQL**
+  - **React Native Expo**
+  - **Android Studio**
 
-### `npm test`
+  ##
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  ## Backend Setup
 
-### `npm run build`
+  1.  Clone Repository
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  - `git clone https://github.com/BunjanMark/CAPSTONE_EMS.git` then `cd Backend`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+  2.  Install Dependencies
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+      - `composer install`
 
-### `npm run eject`
+  3.  Environment Configuration
+      - `cp .env.example .env` then configure the .env with your db `php artisan key:generate`
+  4.  Database Setup
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+      - run migrations `php artisan migrate` then run seeders if there's
+        any
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  5.  Start Laravel Server with specific channel
+      - s`php artisan serve --host=**{yourIPADRESSHERE}** --port=**port here**`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+  ## Fontend Setup (React Native
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+  1.  Clone repository
+      - `git clone https://github.com/BunjanMark/CAPSTONE_EMS.git` then `cd eventwise_main`
+  2.  Install Dependencies
+      - `npm install`
+  3.  Environment Configuration
+      - Navigate to src/constants/constant.js then change `const API_URL ="your IP and port here";`
+  4.  Run the app with specific channel
 
-## Learn More
+## Before you do code or push, make sure to git pull first from master branch
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+`git pull`
+Look for changes in dependencies and install them accordingly.
+for example `composer install` and `npm install` in their respective directory
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Push only to master branch
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+`git branch -M master`
+`git push origin HEAD`
