@@ -6,7 +6,7 @@
 
   1. Prerequisites
   2. Backend Setup (Laravel) - Clone Repository - Install Dependencies - Environment Configuration - Database Setup - Run Migrations - Start Laravel Server with specific channel
-  3. Frontend Setup (React Native) - Clone Repository - Install Dependencies - Environment Configuration - Run the App with specific channel
+  3. Frontend Setup (React JS) - Clone Repository - Install Dependencies - Environment Configuration - Run the App with specific channel
 
   ##
 
@@ -17,9 +17,7 @@
   - **PHP** (v7.4 or higher)
   - **Composer**
   - **Laravel Installer**
-  - **MySQL**
-  - **React Native Expo**
-  - **Android Studio**
+  - **MySQL**A
 
   ##
 
